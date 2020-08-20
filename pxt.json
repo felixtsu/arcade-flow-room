@@ -5,7 +5,8 @@
         "device": "*",
         "cubicbird-helper-blocks": "github:felixtsu/cubicbird-helper-blocks#v0.6.0",
         "cubicbird-game-jam": "github:felixtsu/cubicbird-game-jam#v0.0.4",
-        "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.1.0"
+        "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.1.0",
+        "animation": "*"
     },
     "files": [
         "main.blocks",
@@ -24,5 +25,5 @@
     "supportedTargets": [
         "arcade"
     ],
-    "preferredEditor": "tsprj"
+    "preferredEditor": "blocksprj"
 }
