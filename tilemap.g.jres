@@ -39,6 +39,33 @@
         "mimeType": "image/x-mkcd-f4",
         "tilemapTile": true
     },
+    "级别1": {
+        "id": "级别1",
+        "mimeType": "application/mkcd-tilemap",
+        "data": "MTAxMDAwMTAwMDAxMDUwNTA1MDUwNTA1MDUwNTA1MDUwNTA1MDUwNTA0MDIwOTA5MDkwOTA5MDkxMTA5MTAwOTA5MDkwOTA5MDYwMjA5MDkwOTA5MDkwOTA5MDkwOTA5MDkwOTA5MDkwNjAyMDkwOTEyMGIwZDBiMGIwYjBkMGIwYjBiMGEwOTA2MDIwOTA5MDkwOTBiMDkwOTA5MGIwOTA5MDkwOTA5MDYwMjA5MDkwOTA5MGIwOTA5MDkwYjA5MDkwOTA5MDkwNjAyMDkwOTA5MDkwYjA5MDkwOTBiMDkwOTA5MDkwOTA2MDIwOTA5MDkwOTBjMGIwYjBiMGYwOTA5MDkwOTA5MDYwMjA5MDkwOTA5MGIwOTA5MDkwYjA5MDkwOTA5MDkwNjAyMDkwOTA5MDkwZDBiMGIwYjBlMGIwYjBjMDkwOTA2MDIwOTA5MDkwOTBiMDkwOTA5MGIwOTA5MGIwOTA5MDYwMjA5MDkwOTA5MGIwOTA5MDkwYjA5MDkwYTA5MDkwNjAyMDkwOTA5MDkwYjA5MDkwOTBiMDkwOTA5MDkwOTA2MDIwOTA5MDkwOTBlMGIwYjBiMGEwOTA5MDkwOTA5MDYwMjA5MDkwOTA5MDkwOTA5MDkwOTA5MDkwOTA5MDkwNjAzMDgwODA4MDgwODA4MDgwODA4MDgwODA4MDgwODA3MjIyMjIyMjIyMjIyMjIyMjAyMDAwMDAwMDAwMDAwMjAwMjAwMDAwMDAwMDAwMDIwMDIwMDAwMDAwMDAwMDAyMDAyMDAwMDAwMDAwMDAwMjAwMjAwMDAwMDAwMDAwMDIwMDIwMDAwMDAwMDAwMDAyMDAyMDAwMDAwMDAwMDAwMjAwMjAwMDAwMDAwMDAwMDIwMDIwMDAwMDAwMDAwMDAyMDAyMDAwMDAwMDAwMDAwMjAwMjAwMDAwMDAwMDAwMDIwMDIwMDAwMDAwMDAwMDAyMDAyMDAwMDAwMDAwMDAwMjAwMjAwMDAwMDAwMDAwMDIwMjIyMjIyMjIyMjIyMjIyMg==",
+        "tileset": [
+            "myTiles.transparency16",
+            "sprites.dungeon.purpleOuterNorthWest",
+            "sprites.dungeon.purpleOuterWest0",
+            "sprites.dungeon.purpleOuterSouthEast",
+            "sprites.dungeon.purpleOuterNorthEast",
+            "sprites.dungeon.purpleOuterNorth0",
+            "sprites.dungeon.purpleOuterEast1",
+            "sprites.dungeon.purpleOuterSouthWest",
+            "sprites.dungeon.purpleOuterSouth1",
+            "sprites.dungeon.floorLight2",
+            "sprites.dungeon.chestOpen",
+            "myTiles.tile1",
+            "myTiles.tile2",
+            "myTiles.tile3",
+            "myTiles.tile5",
+            "myTiles.tile4",
+            "myTiles.tile6",
+            "myTiles.tile7",
+            "sprites.dungeon.collectibleBlueCrystal"
+        ],
+        "displayName": "级别1"
+    },
     "*": {
         "mimeType": "image/x-mkcd-f4",
         "dataEncoding": "base64",

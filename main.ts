@@ -36,21 +36,21 @@ function zglCreateWaypoint (direction: string) {
     return zglWaypointSprite
 }
 function zglTurnAllWaypoint () {
-    downTiles = tiles.getTilesByType(myTiles.tile2)
-    leftTiles = tiles.getTilesByType(myTiles.tile4)
-    upTiles = tiles.getTilesByType(myTiles.tile5)
-    rightTiles = tiles.getTilesByType(myTiles.tile3)
+    downTiles = tiles.getTilesByType(assets.tile`tile2`)
+    leftTiles = tiles.getTilesByType(assets.tile`tile4`)
+    upTiles = tiles.getTilesByType(assets.tile`tile5`)
+    rightTiles = tiles.getTilesByType(assets.tile`tile3`)
     for (let value2 of downTiles) {
-        tiles.setTileAt(value2, myTiles.tile4)
+        tiles.setTileAt(value2, assets.tile`tile4`)
     }
     for (let value22 of leftTiles) {
-        tiles.setTileAt(value22, myTiles.tile5)
+        tiles.setTileAt(value22, assets.tile`tile5`)
     }
     for (let value23 of upTiles) {
-        tiles.setTileAt(value23, myTiles.tile3)
+        tiles.setTileAt(value23, assets.tile`tile3`)
     }
     for (let value24 of rightTiles) {
-        tiles.setTileAt(value24, myTiles.tile2)
+        tiles.setTileAt(value24, assets.tile`tile2`)
     }
     zglWaypoints = sprites.allOfKind(SpriteKind.zglWaypoint)
     for (let value of zglWaypoints) {
@@ -102,25 +102,12 @@ function zglCreatePlayerSprite () {
     zglShadowSprite.setPosition(zglPlayerSprite.x, zglPlayerSprite.y)
 }
 function zglStartup () {
-    tiles.setTilemap(tiles.createTilemap(hex`10001000010505050505050505050505050505040209090909090911091009090909090602090909090909090909090909090906020909120b0d0b0b0b0d0b0b0b0a090602090909090b0909090b09090909090602090909090b0909090b09090909090602090909090b0909090b09090909090602090909090c0b0b0b0f09090909090602090909090b0909090b09090909090602090909090d0b0b0b0e0b0b0c09090602090909090b0909090b09090b09090602090909090b0909090b09090a09090602090909090b0909090b09090909090602090909090e0b0b0b0a0909090909060209090909090909090909090909090603080808080808080808080808080807`, img`
-        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-        2 . . . . . . . . . . . . . . 2 
-        2 . . . . . . . . . . . . . . 2 
-        2 . . . . . . . . . . . . . . 2 
-        2 . . . . . . . . . . . . . . 2 
-        2 . . . . . . . . . . . . . . 2 
-        2 . . . . . . . . . . . . . . 2 
-        2 . . . . . . . . . . . . . . 2 
-        2 . . . . . . . . . . . . . . 2 
-        2 . . . . . . . . . . . . . . 2 
-        2 . . . . . . . . . . . . . . 2 
-        2 . . . . . . . . . . . . . . 2 
-        2 . . . . . . . . . . . . . . 2 
-        2 . . . . . . . . . . . . . . 2 
-        2 . . . . . . . . . . . . . . 2 
-        2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
-        `, [myTiles.transparency16,sprites.dungeon.purpleOuterNorthWest,sprites.dungeon.purpleOuterWest0,sprites.dungeon.purpleOuterSouthEast,sprites.dungeon.purpleOuterNorthEast,sprites.dungeon.purpleOuterNorth0,sprites.dungeon.purpleOuterEast1,sprites.dungeon.purpleOuterSouthWest,sprites.dungeon.purpleOuterSouth1,sprites.dungeon.floorLight2,sprites.dungeon.chestOpen,myTiles.tile1,myTiles.tile2,myTiles.tile3,myTiles.tile5,myTiles.tile4,myTiles.tile6,myTiles.tile7,sprites.dungeon.collectibleBlueCrystal], TileScale.Sixteen))
+    tiles.setTilemap(tilemap`级别1`)
 }
+sprites.onOverlap(SpriteKind.zglPlayer, SpriteKind.zglElder, function (sprite, otherSprite) {
+    otherSprite.setFlag(SpriteFlag.Ghost, true)
+    otherSprite.say("探险者，我们的魔法可以把你传送到别的地方", 5000)
+})
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     animation.runImageAnimation(
     zglPlayerSprite,
@@ -197,10 +184,6 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     true
     )
 })
-sprites.onOverlap(SpriteKind.zglPlayer, SpriteKind.zglElder, function (sprite, otherSprite) {
-    otherSprite.setFlag(SpriteFlag.Ghost, true)
-    otherSprite.say("探险者，我们的魔法可以把你传送到别的地方", 5000)
-})
 function zglTurnWaypointSprite (waypointSprite: Sprite) {
     if (sprites.readDataString(waypointSprite, "direction") == "UP") {
         sprites.setDataString(waypointSprite, "direction", "RIGHT")
@@ -266,27 +249,203 @@ sprites.onOverlap(SpriteKind.zglBall, SpriteKind.zglWaypoint, function (sprite, 
         }
     }
 })
+controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
+    animation.runImageAnimation(
+    zglPlayerSprite,
+    [img`
+        . . . . . . f f f f . . . . . . 
+        . . . . f f f 2 2 f f f . . . . 
+        . . . f f f 2 2 2 2 f f f . . . 
+        . . f f f e e e e e e f f f . . 
+        . . f f e 2 2 2 2 2 2 e e f . . 
+        . . f e 2 f f f f f f 2 e f . . 
+        . . f f f f e e e e f f f f . . 
+        . f f e f b f 4 4 f b f e f f . 
+        . f e e 4 1 f d d f 1 4 e e f . 
+        . . f e e d d d d d d e e f . . 
+        . . . f e e 4 4 4 4 e e f . . . 
+        . . e 4 f 2 2 2 2 2 2 f 4 e . . 
+        . . 4 d f 2 2 2 2 2 2 f d 4 . . 
+        . . 4 4 f 4 4 5 5 4 4 f 4 4 . . 
+        . . . . . f f f f f f . . . . . 
+        . . . . . f f . . f f . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . f f f f . . . . . . 
+        . . . . f f f 2 2 f f f . . . . 
+        . . . f f f 2 2 2 2 f f f . . . 
+        . . f f f e e e e e e f f f . . 
+        . . f f e 2 2 2 2 2 2 e e f . . 
+        . f f e 2 f f f f f f 2 e f f . 
+        . f f f f f e e e e f f f f f . 
+        . . f e f b f 4 4 f b f e f . . 
+        . . f e 4 1 f d d f 1 4 e f . . 
+        . . . f e 4 d d d d 4 e f e . . 
+        . . f e f 2 2 2 2 e d d 4 e . . 
+        . . e 4 f 2 2 2 2 e d d e . . . 
+        . . . . f 4 4 5 5 f e e . . . . 
+        . . . . f f f f f f f . . . . . 
+        . . . . f f f . . . . . . . . . 
+        `,img`
+        . . . . . . f f f f . . . . . . 
+        . . . . f f f 2 2 f f f . . . . 
+        . . . f f f 2 2 2 2 f f f . . . 
+        . . f f f e e e e e e f f f . . 
+        . . f f e 2 2 2 2 2 2 e e f . . 
+        . . f e 2 f f f f f f 2 e f . . 
+        . . f f f f e e e e f f f f . . 
+        . f f e f b f 4 4 f b f e f f . 
+        . f e e 4 1 f d d f 1 4 e e f . 
+        . . f e e d d d d d d e e f . . 
+        . . . f e e 4 4 4 4 e e f . . . 
+        . . e 4 f 2 2 2 2 2 2 f 4 e . . 
+        . . 4 d f 2 2 2 2 2 2 f d 4 . . 
+        . . 4 4 f 4 4 5 5 4 4 f 4 4 . . 
+        . . . . . f f f f f f . . . . . 
+        . . . . . f f . . f f . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . f f f f . . . . . . 
+        . . . . f f f 2 2 f f f . . . . 
+        . . . f f f 2 2 2 2 f f f . . . 
+        . . f f f e e e e e e f f f . . 
+        . . f e e 2 2 2 2 2 2 e f f . . 
+        . f f e 2 f f f f f f 2 e f f . 
+        . f f f f f e e e e f f f f f . 
+        . . f e f b f 4 4 f b f e f . . 
+        . . f e 4 1 f d d f 1 4 e f . . 
+        . . e f e 4 d d d d 4 e f . . . 
+        . . e 4 d d e 2 2 2 2 f e f . . 
+        . . . e d d e 2 2 2 2 f 4 e . . 
+        . . . . e e f 5 5 4 4 f . . . . 
+        . . . . . f f f f f f f . . . . 
+        . . . . . . . . . f f f . . . . 
+        `],
+    200,
+    true
+    )
+})
 sprites.onOverlap(SpriteKind.zglPlayer, SpriteKind.zglButtonReverse, function (sprite, otherSprite) {
     music.pewPew.play()
-    otherSprite.setKind(SpriteKind.zglButtonReversePressed)
-    otherSprite.setImage(img`
-        b b b b b b b b b b b b b b b b 
-        b c b b b b b b b b b b b b c b 
-        b b b c 6 6 6 6 6 6 6 6 c b b b 
-        b b c 6 6 6 6 6 6 6 6 6 6 c b b 
-        b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
-        b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
-        b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
-        b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
-        b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
-        b b 9 6 6 6 6 6 6 6 6 6 6 9 b b 
-        b b 9 6 6 6 6 6 6 6 6 6 6 9 b b 
-        b b 6 9 6 6 6 6 6 6 6 6 9 6 b b 
-        b b c 6 9 9 9 9 9 9 9 9 6 c b b 
-        b b b c c c c c c c c c c b b b 
-        b c b b b b b b b b b b b b c b 
-        b b b b b b b b b b b b b b b b 
-        `)
+    otherSprite.sayText("A", 100, false)
+    if (controller.A.isPressed()) {
+        otherSprite.setKind(SpriteKind.zglButtonReversePressed)
+        otherSprite.setImage(img`
+            b b b b b b b b b b b b b b b b 
+            b c b b b b b b b b b b b b c b 
+            b b b c 6 6 6 6 6 6 6 6 c b b b 
+            b b c 6 6 6 6 6 6 6 6 6 6 c b b 
+            b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
+            b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
+            b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
+            b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
+            b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
+            b b 9 6 6 6 6 6 6 6 6 6 6 9 b b 
+            b b 9 6 6 6 6 6 6 6 6 6 6 9 b b 
+            b b 6 9 6 6 6 6 6 6 6 6 9 6 b b 
+            b b c 6 9 9 9 9 9 9 9 9 6 c b b 
+            b b b c c c c c c c c c c b b b 
+            b c b b b b b b b b b b b b c b 
+            b b b b b b b b b b b b b b b b 
+            `)
+        zglTurnAllWaypointReverse()
+        pause(200)
+        otherSprite.setImage(img`
+            b b b b b b b b b b b b b b b b 
+            b c b c 6 6 6 6 6 6 6 6 c b c b 
+            b b c 6 6 6 6 6 6 6 6 6 6 c b b 
+            b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
+            b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
+            b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
+            b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
+            b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
+            b b 9 6 6 6 6 6 6 6 6 6 6 9 b b 
+            b b 9 6 6 6 6 6 6 6 6 6 6 9 b b 
+            b b 6 9 6 6 6 6 6 6 6 6 9 6 b b 
+            b b 6 6 9 9 9 9 9 9 9 9 6 6 b b 
+            b b c 6 6 6 6 6 6 6 6 6 6 c b b 
+            b b b c c c c c c c c c c b b b 
+            b c b b b b b b b b b b b b c b 
+            b b b b b b b b b b b b b b b b 
+            `)
+        otherSprite.setKind(SpriteKind.zglButtonReverse)
+    }
+})
+controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+    animation.runImageAnimation(
+    zglPlayerSprite,
+    [img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . f f f f f f . . . . 
+        . . . . f f e e e e f 2 f . . . 
+        . . . f f e e e e f 2 2 2 f . . 
+        . . . f e e e f f e e e e f . . 
+        . . . f f f f e e 2 2 2 2 e f . 
+        . . . f e 2 2 2 f f f f e 2 f . 
+        . . f f f f f f f e e e f f f . 
+        . . f f e 4 4 e b f 4 4 e e f . 
+        . . f e e 4 d 4 1 f d d e f . . 
+        . . . f e e e 4 d d d d f . . . 
+        . . . . 4 d d e 4 4 4 e f . . . 
+        . . . . e d d e 2 2 2 2 f . . . 
+        . . . . f e e f 4 4 5 5 f f . . 
+        . . . . f f f f f f f f f f . . 
+        . . . . . f f . . . f f f . . . 
+        `,img`
+        . . . . . . f f f f f f . . . . 
+        . . . . f f e e e e f 2 f . . . 
+        . . . f f e e e e f 2 2 2 f . . 
+        . . . f e e e f f e e e e f . . 
+        . . . f f f f e e 2 2 2 2 e f . 
+        . . . f e 2 2 2 f f f f e 2 f . 
+        . . f f f f f f f e e e f f f . 
+        . . f f e 4 4 e b f 4 4 e e f . 
+        . . f e e 4 d 4 1 f d d e f . . 
+        . . . f e e e 4 d d d d f . . . 
+        . . . . f f e e 4 4 4 e f . . . 
+        . . . . . 4 d d e 2 2 2 f . . . 
+        . . . . . e d d e 2 2 2 f . . . 
+        . . . . . f e e f 4 5 5 f . . . 
+        . . . . . . f f f f f f . . . . 
+        . . . . . . . f f f . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . f f f f f f . . . . 
+        . . . . f f e e e e f 2 f . . . 
+        . . . f f e e e e f 2 2 2 f . . 
+        . . . f e e e f f e e e e f . . 
+        . . . f f f f e e 2 2 2 2 e f . 
+        . . . f e 2 2 2 f f f f e 2 f . 
+        . . f f f f f f f e e e f f f . 
+        . . f f e 4 4 e b f 4 4 e e f . 
+        . . f e e 4 d 4 1 f d d e f . . 
+        . . . f e e e e e d d d f . . . 
+        . . . . . f 4 d d e 4 e f . . . 
+        . . . . . f e d d e 2 2 f . . . 
+        . . . . f f f e e f 5 5 f f . . 
+        . . . . f f f f f f f f f f . . 
+        . . . . . f f . . . f f f . . . 
+        `,img`
+        . . . . . . f f f f f f . . . . 
+        . . . . f f e e e e f 2 f . . . 
+        . . . f f e e e e f 2 2 2 f . . 
+        . . . f e e e f f e e e e f . . 
+        . . . f f f f e e 2 2 2 2 e f . 
+        . . . f e 2 2 2 f f f f e 2 f . 
+        . . f f f f f f f e e e f f f . 
+        . . f f e 4 4 e b f 4 4 e e f . 
+        . . f e e 4 d 4 1 f d d e f . . 
+        . . . f e e e 4 d d d d f . . . 
+        . . . . f f e e 4 4 4 e f . . . 
+        . . . . . 4 d d e 2 2 2 f . . . 
+        . . . . . e d d e 2 2 2 f . . . 
+        . . . . . f e e f 4 5 5 f . . . 
+        . . . . . . f f f f f f . . . . 
+        . . . . . . . f f f . . . . . . 
+        `],
+    200,
+    true
+    )
 })
 sprites.onOverlap(SpriteKind.zglBall, SpriteKind.zglOpenBox, function (sprite, otherSprite) {
     music.magicWand.play()
@@ -313,6 +472,183 @@ sprites.onOverlap(SpriteKind.zglBall, SpriteKind.zglOpenBox, function (sprite, o
     if (sprites.allOfKind(SpriteKind.zglOpenBox).length == 0 && !(zglBeamOpened)) {
         zglBeamOpened = true
         zglShowBeam()
+    }
+})
+function zglClearAllSprites () {
+    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglBall)
+    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglPlayer)
+    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglWaypoint)
+    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglButton)
+    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglButtonPress)
+    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglButtonReverse)
+    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglButtonReversePressed)
+    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglShadow)
+    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglElder)
+    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglTeleportBeam)
+}
+function zglPlaceBox () {
+    for (let value of tiles.getTilesByType(sprites.dungeon.chestOpen)) {
+        zglBoxSprite = sprites.create(img`
+            . b b b b b b b b b b b b b b . 
+            b e 4 4 4 4 4 4 4 4 4 4 4 4 4 b 
+            b e 4 4 4 4 4 4 4 4 4 4 4 4 e b 
+            b e e 4 4 4 4 4 4 4 4 4 4 e e b 
+            b b b b b b b d d b b b b b b b 
+            . b b b b b b c c b b b b b b . 
+            b c c c c c b c c b c c c c c b 
+            b c c c c c c b b c c c c c c b 
+            b c c c c c c c c c c c c c c b 
+            b c c c c c c c c c c c c c c b 
+            b b b b b b b b b b b b b b b b 
+            b e e e e e e e e e e e e e e b 
+            b e e e e e e e e e e e e e e b 
+            b c e e e e e e e e e e e e c b 
+            b b b b b b b b b b b b b b b b 
+            . b b . . . . . . . . . . b b . 
+            `, SpriteKind.zglOpenBox)
+        tiles.placeOnTile(zglBoxSprite, value)
+    }
+}
+function zglPlaceElderSprite () {
+    zglElderSprite = sprites.create(img`
+        . . . . . d d d d . . . . . 
+        . . . d d 1 1 1 1 d d . . . 
+        . . d 1 1 1 1 1 1 1 1 d . . 
+        . d 1 1 1 1 1 1 1 1 1 1 d . 
+        . d 1 1 1 d b b d 1 1 1 d . 
+        d 1 1 1 b 4 4 4 4 b 1 1 1 d 
+        d 1 1 c c 4 4 4 4 c c 1 1 d 
+        d b b f b f 4 4 f b f b b d 
+        d b b 4 1 f d d f 1 4 b b d 
+        . f b f d d d d d d f b f . 
+        . f e f e 4 4 4 4 e f e f . 
+        . e 4 f 6 9 9 9 9 6 f 4 e . 
+        . 4 d c 9 9 9 9 9 9 c d 4 . 
+        . 4 f b 3 b 3 b 3 b b f 4 . 
+        . . f f 3 b 3 b 3 3 f f . . 
+        . . . . f f b b f f . . . . 
+        `, SpriteKind.zglElder)
+    tiles.placeOnTile(zglElderSprite, tiles.getTileLocation(3, 2))
+}
+sprites.onOverlap(SpriteKind.zglBall, SpriteKind.zglCloseBox, function (sprite, otherSprite) {
+    sprite.destroy()
+})
+sprites.onOverlap(SpriteKind.zglPlayer, SpriteKind.zglTeleportBeam, function (sprite, otherSprite) {
+    zglClearAllSprites()
+    gamejam.roomFinished(true)
+})
+scene.onOverlapTile(SpriteKind.zglBall, sprites.dungeon.floorLight2, function (sprite, location) {
+    sprite.destroy()
+})
+gamejam.onMyGameUpdateInterval(10, function () {
+    zglShadowSprite.setPosition(zglPlayerSprite.x, zglPlayerSprite.y)
+})
+gamejam.onMyGameUpdateInterval(10, function () {
+    zglButtons = sprites.allOfKind(SpriteKind.zglButtonPress)
+    for (let value3 of zglButtons) {
+        if (!(value3.overlapsWith(zglPlayerSprite))) {
+            value3.setKind(SpriteKind.zglButton)
+            value3.setImage(img`
+                b b b b b b b b b b b b b b b b 
+                b c b e 4 4 4 4 4 4 4 4 e b c b 
+                b b e 4 4 4 4 4 4 4 4 4 4 e b b 
+                b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
+                b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
+                b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
+                b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
+                b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
+                b b d 4 4 4 4 4 4 4 4 4 4 d b b 
+                b b d 4 4 4 4 4 4 4 4 4 4 d b b 
+                b b 4 d 4 4 4 4 4 4 4 4 d 4 b b 
+                b b 4 4 d d d d d d d d 4 4 b b 
+                b b c 4 4 4 4 4 4 4 4 4 4 c b b 
+                b b b c c c c c c c c c c b b b 
+                b c b b b b b b b b b b b b c b 
+                b b b b b b b b b b b b b b b b 
+                `)
+            zglTurnAllWaypoint()
+        }
+    }
+    zglButtons = sprites.allOfKind(SpriteKind.zglButtonReversePressed)
+    for (let value4 of zglButtons) {
+        if (!(value4.overlapsWith(zglPlayerSprite))) {
+            value4.setKind(SpriteKind.zglButtonReverse)
+            zglTurnAllWaypointReverse()
+        }
+    }
+})
+function zglCreateBall () {
+    zglBallSprite = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . 6 6 6 6 . . . . . . 
+        . . . . 6 6 6 5 5 6 6 6 . . . . 
+        . . . 7 7 7 7 6 6 6 6 6 6 . . . 
+        . . 6 7 7 7 7 8 8 8 1 1 6 6 . . 
+        . . 7 7 7 7 7 8 8 8 1 1 5 6 . . 
+        . 6 7 7 7 7 8 8 8 8 8 5 5 6 6 . 
+        . 6 7 7 7 8 8 8 6 6 6 6 5 6 6 . 
+        . 6 6 7 7 8 8 6 6 6 6 6 6 6 6 . 
+        . 6 8 7 7 8 8 6 6 6 6 6 6 6 6 . 
+        . . 6 8 7 7 8 6 6 6 6 6 8 6 . . 
+        . . 6 8 8 7 8 8 6 6 6 8 6 6 . . 
+        . . . 6 8 8 8 8 8 8 8 8 6 . . . 
+        . . . . 6 6 8 8 8 8 6 6 . . . . 
+        . . . . . . 6 6 6 6 . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.zglBall)
+    tiles.placeOnRandomTile(zglBallSprite, sprites.dungeon.collectibleBlueCrystal)
+    zglBallSprite.vx = zglBallSpeed
+}
+function zglPlaceWaypoints () {
+    for (let value29 of tiles.getTilesByType(assets.tile`tile2`)) {
+        tiles.placeOnTile(zglCreateWaypoint("DOWN"), value29)
+    }
+    for (let value32 of tiles.getTilesByType(assets.tile`tile3`)) {
+        tiles.placeOnTile(zglCreateWaypoint("RIGHT"), value32)
+    }
+    for (let value42 of tiles.getTilesByType(assets.tile`tile5`)) {
+        tiles.placeOnTile(zglCreateWaypoint("UP"), value42)
+    }
+    for (let value52 of tiles.getTilesByType(assets.tile`tile4`)) {
+        tiles.placeOnTile(zglCreateWaypoint("LEFT"), value52)
+    }
+}
+function turnWaypointSpriteReverse (waypointSprite: Sprite) {
+    if (sprites.readDataString(waypointSprite, "direction") == "UP") {
+        sprites.setDataString(waypointSprite, "direction", "LEFT")
+    } else if (sprites.readDataString(waypointSprite, "direction") == "RIGHT") {
+        sprites.setDataString(waypointSprite, "direction", "UP")
+    } else if (sprites.readDataString(waypointSprite, "direction") == "DOWN") {
+        sprites.setDataString(waypointSprite, "direction", "RIGHT")
+    } else {
+        sprites.setDataString(waypointSprite, "direction", "DOWN")
+    }
+}
+function zglTurnAllWaypointReverse () {
+    downTiles = tiles.getTilesByType(assets.tile`tile2`)
+    leftTiles = tiles.getTilesByType(assets.tile`tile4`)
+    upTiles = tiles.getTilesByType(assets.tile`tile5`)
+    rightTiles = tiles.getTilesByType(assets.tile`tile3`)
+    for (let value25 of downTiles) {
+        tiles.setTileAt(value25, assets.tile`tile3`)
+    }
+    for (let value26 of leftTiles) {
+        tiles.setTileAt(value26, assets.tile`tile2`)
+    }
+    for (let value27 of upTiles) {
+        tiles.setTileAt(value27, assets.tile`tile4`)
+    }
+    for (let value28 of rightTiles) {
+        tiles.setTileAt(value28, assets.tile`tile5`)
+    }
+    zglWaypoints = sprites.allOfKind(SpriteKind.zglWaypoint)
+    for (let value5 of zglWaypoints) {
+        turnWaypointSpriteReverse(value5)
+    }
+}
+gamejam.onMyGameUpdateInterval(2000, function () {
+    if (!(zglBeamOpened)) {
+        zglCreateBall()
     }
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -391,411 +727,88 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     true
     )
 })
-function zglClearAllSprites () {
-    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglBall)
-    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglPlayer)
-    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglWaypoint)
-    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglButton)
-    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglButtonPress)
-    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglButtonReverse)
-    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglButtonReversePressed)
-    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglShadow)
-    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglElder)
-    cubicbird.destroyAllSpriteOfKind(SpriteKind.zglTeleportBeam)
-}
-function zglPlaceBox () {
-    for (let value of tiles.getTilesByType(sprites.dungeon.chestOpen)) {
-        zglBoxSprite = sprites.create(img`
-            . b b b b b b b b b b b b b b . 
-            b e 4 4 4 4 4 4 4 4 4 4 4 4 4 b 
-            b e 4 4 4 4 4 4 4 4 4 4 4 4 e b 
-            b e e 4 4 4 4 4 4 4 4 4 4 e e b 
-            b b b b b b b d d b b b b b b b 
-            . b b b b b b c c b b b b b b . 
-            b c c c c c b c c b c c c c c b 
-            b c c c c c c b b c c c c c c b 
-            b c c c c c c c c c c c c c c b 
-            b c c c c c c c c c c c c c c b 
-            b b b b b b b b b b b b b b b b 
-            b e e e e e e e e e e e e e e b 
-            b e e e e e e e e e e e e e e b 
-            b c e e e e e e e e e e e e c b 
-            b b b b b b b b b b b b b b b b 
-            . b b . . . . . . . . . . b b . 
-            `, SpriteKind.zglOpenBox)
-        tiles.placeOnTile(zglBoxSprite, value)
-    }
-}
-function zglPlaceElderSprite () {
-    zglElderSprite = sprites.create(img`
-        . . . . . d d d d . . . . . 
-        . . . d d 1 1 1 1 d d . . . 
-        . . d 1 1 1 1 1 1 1 1 d . . 
-        . d 1 1 1 1 1 1 1 1 1 1 d . 
-        . d 1 1 1 d b b d 1 1 1 d . 
-        d 1 1 1 b 4 4 4 4 b 1 1 1 d 
-        d 1 1 c c 4 4 4 4 c c 1 1 d 
-        d b b f b f 4 4 f b f b b d 
-        d b b 4 1 f d d f 1 4 b b d 
-        . f b f d d d d d d f b f . 
-        . f e f e 4 4 4 4 e f e f . 
-        . e 4 f 6 9 9 9 9 6 f 4 e . 
-        . 4 d c 9 9 9 9 9 9 c d 4 . 
-        . 4 f b 3 b 3 b 3 b b f 4 . 
-        . . f f 3 b 3 b 3 3 f f . . 
-        . . . . f f b b f f . . . . 
-        `, SpriteKind.zglElder)
-    tiles.placeOnTile(zglElderSprite, tiles.getTileLocation(3, 2))
-}
-sprites.onOverlap(SpriteKind.zglBall, SpriteKind.zglCloseBox, function (sprite, otherSprite) {
-    sprite.destroy()
-})
-sprites.onOverlap(SpriteKind.zglPlayer, SpriteKind.zglTeleportBeam, function (sprite, otherSprite) {
-    zglClearAllSprites()
-    gamejam.roomFinished(true)
-})
-scene.onOverlapTile(SpriteKind.zglBall, sprites.dungeon.floorLight2, function (sprite, location) {
-    sprite.destroy()
-})
-controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    animation.runImageAnimation(
-    zglPlayerSprite,
-    [img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . f f f f f f . . . . 
-        . . . . f f e e e e f 2 f . . . 
-        . . . f f e e e e f 2 2 2 f . . 
-        . . . f e e e f f e e e e f . . 
-        . . . f f f f e e 2 2 2 2 e f . 
-        . . . f e 2 2 2 f f f f e 2 f . 
-        . . f f f f f f f e e e f f f . 
-        . . f f e 4 4 e b f 4 4 e e f . 
-        . . f e e 4 d 4 1 f d d e f . . 
-        . . . f e e e 4 d d d d f . . . 
-        . . . . 4 d d e 4 4 4 e f . . . 
-        . . . . e d d e 2 2 2 2 f . . . 
-        . . . . f e e f 4 4 5 5 f f . . 
-        . . . . f f f f f f f f f f . . 
-        . . . . . f f . . . f f f . . . 
-        `,img`
-        . . . . . . f f f f f f . . . . 
-        . . . . f f e e e e f 2 f . . . 
-        . . . f f e e e e f 2 2 2 f . . 
-        . . . f e e e f f e e e e f . . 
-        . . . f f f f e e 2 2 2 2 e f . 
-        . . . f e 2 2 2 f f f f e 2 f . 
-        . . f f f f f f f e e e f f f . 
-        . . f f e 4 4 e b f 4 4 e e f . 
-        . . f e e 4 d 4 1 f d d e f . . 
-        . . . f e e e 4 d d d d f . . . 
-        . . . . f f e e 4 4 4 e f . . . 
-        . . . . . 4 d d e 2 2 2 f . . . 
-        . . . . . e d d e 2 2 2 f . . . 
-        . . . . . f e e f 4 5 5 f . . . 
-        . . . . . . f f f f f f . . . . 
-        . . . . . . . f f f . . . . . . 
-        `,img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . f f f f f f . . . . 
-        . . . . f f e e e e f 2 f . . . 
-        . . . f f e e e e f 2 2 2 f . . 
-        . . . f e e e f f e e e e f . . 
-        . . . f f f f e e 2 2 2 2 e f . 
-        . . . f e 2 2 2 f f f f e 2 f . 
-        . . f f f f f f f e e e f f f . 
-        . . f f e 4 4 e b f 4 4 e e f . 
-        . . f e e 4 d 4 1 f d d e f . . 
-        . . . f e e e e e d d d f . . . 
-        . . . . . f 4 d d e 4 e f . . . 
-        . . . . . f e d d e 2 2 f . . . 
-        . . . . f f f e e f 5 5 f f . . 
-        . . . . f f f f f f f f f f . . 
-        . . . . . f f . . . f f f . . . 
-        `,img`
-        . . . . . . f f f f f f . . . . 
-        . . . . f f e e e e f 2 f . . . 
-        . . . f f e e e e f 2 2 2 f . . 
-        . . . f e e e f f e e e e f . . 
-        . . . f f f f e e 2 2 2 2 e f . 
-        . . . f e 2 2 2 f f f f e 2 f . 
-        . . f f f f f f f e e e f f f . 
-        . . f f e 4 4 e b f 4 4 e e f . 
-        . . f e e 4 d 4 1 f d d e f . . 
-        . . . f e e e 4 d d d d f . . . 
-        . . . . f f e e 4 4 4 e f . . . 
-        . . . . . 4 d d e 2 2 2 f . . . 
-        . . . . . e d d e 2 2 2 f . . . 
-        . . . . . f e e f 4 5 5 f . . . 
-        . . . . . . f f f f f f . . . . 
-        . . . . . . . f f f . . . . . . 
-        `],
-    200,
-    true
-    )
-})
-gamejam.onMyGameUpdateInterval(10, function () {
-    zglShadowSprite.setPosition(zglPlayerSprite.x, zglPlayerSprite.y)
-})
-gamejam.onMyGameUpdateInterval(10, function () {
-    zglButtons = sprites.allOfKind(SpriteKind.zglButtonPress)
-    for (let value3 of zglButtons) {
-        if (!(value3.overlapsWith(zglPlayerSprite))) {
-            value3.setKind(SpriteKind.zglButton)
-            value3.setImage(img`
-                b b b b b b b b b b b b b b b b 
-                b c b e 4 4 4 4 4 4 4 4 e b c b 
-                b b e 4 4 4 4 4 4 4 4 4 4 e b b 
-                b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
-                b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
-                b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
-                b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
-                b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
-                b b d 4 4 4 4 4 4 4 4 4 4 d b b 
-                b b d 4 4 4 4 4 4 4 4 4 4 d b b 
-                b b 4 d 4 4 4 4 4 4 4 4 d 4 b b 
-                b b 4 4 d d d d d d d d 4 4 b b 
-                b b c 4 4 4 4 4 4 4 4 4 4 c b b 
-                b b b c c c c c c c c c c b b b 
-                b c b b b b b b b b b b b b c b 
-                b b b b b b b b b b b b b b b b 
-                `)
-            zglTurnAllWaypoint()
-        }
-    }
-    zglButtons = sprites.allOfKind(SpriteKind.zglButtonReversePressed)
-    for (let value4 of zglButtons) {
-        if (!(value4.overlapsWith(zglPlayerSprite))) {
-            value4.setKind(SpriteKind.zglButtonReverse)
-            value4.setImage(img`
-                b b b b b b b b b b b b b b b b 
-                b c b c 6 6 6 6 6 6 6 6 c b c b 
-                b b c 6 6 6 6 6 6 6 6 6 6 c b b 
-                b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
-                b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
-                b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
-                b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
-                b b 6 6 6 6 6 6 6 6 6 6 6 6 b b 
-                b b 9 6 6 6 6 6 6 6 6 6 6 9 b b 
-                b b 9 6 6 6 6 6 6 6 6 6 6 9 b b 
-                b b 6 9 6 6 6 6 6 6 6 6 9 6 b b 
-                b b 6 6 9 9 9 9 9 9 9 9 6 6 b b 
-                b b c 6 6 6 6 6 6 6 6 6 6 c b b 
-                b b b c c c c c c c c c c b b b 
-                b c b b b b b b b b b b b b c b 
-                b b b b b b b b b b b b b b b b 
-                `)
-            zglTurnAllWaypointReverse()
-        }
-    }
-})
-function zglCreateBall () {
-    zglBallSprite = sprites.create(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . 6 6 6 6 . . . . . . 
-        . . . . 6 6 6 5 5 6 6 6 . . . . 
-        . . . 7 7 7 7 6 6 6 6 6 6 . . . 
-        . . 6 7 7 7 7 8 8 8 1 1 6 6 . . 
-        . . 7 7 7 7 7 8 8 8 1 1 5 6 . . 
-        . 6 7 7 7 7 8 8 8 8 8 5 5 6 6 . 
-        . 6 7 7 7 8 8 8 6 6 6 6 5 6 6 . 
-        . 6 6 7 7 8 8 6 6 6 6 6 6 6 6 . 
-        . 6 8 7 7 8 8 6 6 6 6 6 6 6 6 . 
-        . . 6 8 7 7 8 6 6 6 6 6 8 6 . . 
-        . . 6 8 8 7 8 8 6 6 6 8 6 6 . . 
-        . . . 6 8 8 8 8 8 8 8 8 6 . . . 
-        . . . . 6 6 8 8 8 8 6 6 . . . . 
-        . . . . . . 6 6 6 6 . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `, SpriteKind.zglBall)
-    tiles.placeOnRandomTile(zglBallSprite, sprites.dungeon.collectibleBlueCrystal)
-    zglBallSprite.vx = zglBallSpeed
-}
-controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-    animation.runImageAnimation(
-    zglPlayerSprite,
-    [img`
-        . . . . . . f f f f . . . . . . 
-        . . . . f f f 2 2 f f f . . . . 
-        . . . f f f 2 2 2 2 f f f . . . 
-        . . f f f e e e e e e f f f . . 
-        . . f f e 2 2 2 2 2 2 e e f . . 
-        . . f e 2 f f f f f f 2 e f . . 
-        . . f f f f e e e e f f f f . . 
-        . f f e f b f 4 4 f b f e f f . 
-        . f e e 4 1 f d d f 1 4 e e f . 
-        . . f e e d d d d d d e e f . . 
-        . . . f e e 4 4 4 4 e e f . . . 
-        . . e 4 f 2 2 2 2 2 2 f 4 e . . 
-        . . 4 d f 2 2 2 2 2 2 f d 4 . . 
-        . . 4 4 f 4 4 5 5 4 4 f 4 4 . . 
-        . . . . . f f f f f f . . . . . 
-        . . . . . f f . . f f . . . . . 
-        `,img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . f f f f . . . . . . 
-        . . . . f f f 2 2 f f f . . . . 
-        . . . f f f 2 2 2 2 f f f . . . 
-        . . f f f e e e e e e f f f . . 
-        . . f f e 2 2 2 2 2 2 e e f . . 
-        . f f e 2 f f f f f f 2 e f f . 
-        . f f f f f e e e e f f f f f . 
-        . . f e f b f 4 4 f b f e f . . 
-        . . f e 4 1 f d d f 1 4 e f . . 
-        . . . f e 4 d d d d 4 e f e . . 
-        . . f e f 2 2 2 2 e d d 4 e . . 
-        . . e 4 f 2 2 2 2 e d d e . . . 
-        . . . . f 4 4 5 5 f e e . . . . 
-        . . . . f f f f f f f . . . . . 
-        . . . . f f f . . . . . . . . . 
-        `,img`
-        . . . . . . f f f f . . . . . . 
-        . . . . f f f 2 2 f f f . . . . 
-        . . . f f f 2 2 2 2 f f f . . . 
-        . . f f f e e e e e e f f f . . 
-        . . f f e 2 2 2 2 2 2 e e f . . 
-        . . f e 2 f f f f f f 2 e f . . 
-        . . f f f f e e e e f f f f . . 
-        . f f e f b f 4 4 f b f e f f . 
-        . f e e 4 1 f d d f 1 4 e e f . 
-        . . f e e d d d d d d e e f . . 
-        . . . f e e 4 4 4 4 e e f . . . 
-        . . e 4 f 2 2 2 2 2 2 f 4 e . . 
-        . . 4 d f 2 2 2 2 2 2 f d 4 . . 
-        . . 4 4 f 4 4 5 5 4 4 f 4 4 . . 
-        . . . . . f f f f f f . . . . . 
-        . . . . . f f . . f f . . . . . 
-        `,img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . f f f f . . . . . . 
-        . . . . f f f 2 2 f f f . . . . 
-        . . . f f f 2 2 2 2 f f f . . . 
-        . . f f f e e e e e e f f f . . 
-        . . f e e 2 2 2 2 2 2 e f f . . 
-        . f f e 2 f f f f f f 2 e f f . 
-        . f f f f f e e e e f f f f f . 
-        . . f e f b f 4 4 f b f e f . . 
-        . . f e 4 1 f d d f 1 4 e f . . 
-        . . e f e 4 d d d d 4 e f . . . 
-        . . e 4 d d e 2 2 2 2 f e f . . 
-        . . . e d d e 2 2 2 2 f 4 e . . 
-        . . . . e e f 5 5 4 4 f . . . . 
-        . . . . . f f f f f f f . . . . 
-        . . . . . . . . . f f f . . . . 
-        `],
-    200,
-    true
-    )
-})
-function zglPlaceWaypoints () {
-    for (let value29 of tiles.getTilesByType(myTiles.tile2)) {
-        tiles.placeOnTile(zglCreateWaypoint("DOWN"), value29)
-    }
-    for (let value32 of tiles.getTilesByType(myTiles.tile3)) {
-        tiles.placeOnTile(zglCreateWaypoint("RIGHT"), value32)
-    }
-    for (let value42 of tiles.getTilesByType(myTiles.tile5)) {
-        tiles.placeOnTile(zglCreateWaypoint("UP"), value42)
-    }
-    for (let value52 of tiles.getTilesByType(myTiles.tile4)) {
-        tiles.placeOnTile(zglCreateWaypoint("LEFT"), value52)
-    }
-}
-function turnWaypointSpriteReverse (waypointSprite: Sprite) {
-    if (sprites.readDataString(waypointSprite, "direction") == "UP") {
-        sprites.setDataString(waypointSprite, "direction", "LEFT")
-    } else if (sprites.readDataString(waypointSprite, "direction") == "RIGHT") {
-        sprites.setDataString(waypointSprite, "direction", "UP")
-    } else if (sprites.readDataString(waypointSprite, "direction") == "DOWN") {
-        sprites.setDataString(waypointSprite, "direction", "RIGHT")
-    } else {
-        sprites.setDataString(waypointSprite, "direction", "DOWN")
-    }
-}
-function zglTurnAllWaypointReverse () {
-    downTiles = tiles.getTilesByType(myTiles.tile2)
-    leftTiles = tiles.getTilesByType(myTiles.tile4)
-    upTiles = tiles.getTilesByType(myTiles.tile5)
-    rightTiles = tiles.getTilesByType(myTiles.tile3)
-    for (let value25 of downTiles) {
-        tiles.setTileAt(value25, myTiles.tile3)
-    }
-    for (let value26 of leftTiles) {
-        tiles.setTileAt(value26, myTiles.tile2)
-    }
-    for (let value27 of upTiles) {
-        tiles.setTileAt(value27, myTiles.tile4)
-    }
-    for (let value28 of rightTiles) {
-        tiles.setTileAt(value28, myTiles.tile5)
-    }
-    zglWaypoints = sprites.allOfKind(SpriteKind.zglWaypoint)
-    for (let value5 of zglWaypoints) {
-        turnWaypointSpriteReverse(value5)
-    }
-}
-gamejam.onMyGameUpdateInterval(2000, function () {
-    if (!(zglBeamOpened)) {
-        zglCreateBall()
-    }
-})
 sprites.onOverlap(SpriteKind.zglPlayer, SpriteKind.zglButton, function (sprite, otherSprite) {
     music.pewPew.play()
-    otherSprite.setKind(SpriteKind.zglButtonPress)
-    otherSprite.setImage(img`
-        b b b b b b b b b b b b b b b b 
-        b c b b b b b b b b b b b b c b 
-        b b b e 4 4 4 4 4 4 4 4 e b b b 
-        b b e 4 4 4 4 4 4 4 4 4 4 e b b 
-        b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
-        b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
-        b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
-        b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
-        b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
-        b b d 4 4 4 4 4 4 4 4 4 4 d b b 
-        b b d 4 4 4 4 4 4 4 4 4 4 d b b 
-        b b 4 d 4 4 4 4 4 4 4 4 d 4 b b 
-        b b c 4 d d d d d d d d 4 c b b 
-        b b b c c c c c c c c c c b b b 
-        b c b b b b b b b b b b b b c b 
-        b b b b b b b b b b b b b b b b 
-        `)
+    otherSprite.sayText("A", 100, false)
+    if (controller.A.isPressed()) {
+        otherSprite.setKind(SpriteKind.zglButtonPress)
+        otherSprite.setImage(img`
+            b b b b b b b b b b b b b b b b 
+            b c b b b b b b b b b b b b c b 
+            b b b e 4 4 4 4 4 4 4 4 e b b b 
+            b b e 4 4 4 4 4 4 4 4 4 4 e b b 
+            b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
+            b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
+            b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
+            b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
+            b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
+            b b d 4 4 4 4 4 4 4 4 4 4 d b b 
+            b b d 4 4 4 4 4 4 4 4 4 4 d b b 
+            b b 4 d 4 4 4 4 4 4 4 4 d 4 b b 
+            b b c 4 d d d d d d d d 4 c b b 
+            b b b c c c c c c c c c c b b b 
+            b c b b b b b b b b b b b b c b 
+            b b b b b b b b b b b b b b b b 
+            `)
+        zglTurnAllWaypoint()
+        pause(200)
+        otherSprite.setImage(img`
+            b b b b b b b b b b b b b b b b 
+            b c b e 4 4 4 4 4 4 4 4 e b c b 
+            b b e 4 4 4 4 4 4 4 4 4 4 e b b 
+            b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
+            b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
+            b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
+            b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
+            b b 4 4 4 4 4 4 4 4 4 4 4 4 b b 
+            b b d 4 4 4 4 4 4 4 4 4 4 d b b 
+            b b d 4 4 4 4 4 4 4 4 4 4 d b b 
+            b b 4 d 4 4 4 4 4 4 4 4 d 4 b b 
+            b b 4 4 d d d d d d d d 4 4 b b 
+            b b c 4 4 4 4 4 4 4 4 4 4 c b b 
+            b b b c c c c c c c c c c b b b 
+            b c b b b b b b b b b b b b c b 
+            b b b b b b b b b b b b b b b b 
+            `)
+        otherSprite.setKind(SpriteKind.zglButton)
+    }
 })
 function zglShowBeam () {
     controller.moveSprite(zglPlayerSprite, 0, 0)
     scene.cameraFollowSprite(zglElderSprite)
     zglTeleportBeamSprite = sprites.create(img`
-        . . d d d d d d d d d d d . . . 
-        d d 1 1 1 1 1 1 1 1 1 1 1 d d . 
-        8 1 1 1 1 1 1 1 1 1 1 1 1 1 d 8 
-        8 8 8 1 1 1 1 1 1 1 1 1 1 8 8 8 
-        . 8 9 8 8 8 8 8 8 8 8 8 8 8 9 8 
-        . 8 9 1 1 9 1 9 8 8 8 8 9 1 9 8 
-        . 8 9 1 1 9 1 9 1 1 9 9 1 1 9 8 
-        . 8 9 1 1 9 1 9 1 1 9 9 1 9 8 8 
-        . 8 9 1 1 9 1 9 1 1 9 1 1 9 8 . 
-        . 8 9 1 1 9 9 9 1 1 9 1 1 9 8 . 
-        . 8 9 1 1 9 9 9 1 1 9 1 1 9 8 . 
-        . 8 8 8 1 9 9 9 1 1 9 1 1 9 8 . 
-        . 8 8 8 1 9 9 9 1 9 9 1 1 9 8 . 
-        . 8 8 8 1 9 9 9 1 9 1 1 1 9 . . 
-        . . 8 8 1 9 9 9 1 9 1 1 1 9 . . 
-        . . 8 8 1 9 9 . 9 9 1 1 1 9 . . 
-        8 . 1 8 1 9 9 1 1 9 1 1 1 9 . . 
-        . . 9 1 9 9 9 1 9 9 1 1 9 9 . . 
-        . . 9 1 9 1 9 1 8 9 1 9 9 9 . . 
-        . . . 1 9 9 9 1 8 9 9 8 9 8 . . 
-        . . 9 1 9 8 9 1 8 9 9 9 9 8 . . 
-        . . 1 9 9 8 9 1 8 9 9 9 9 8 . . 
-        . . . 9 8 9 8 1 8 9 9 9 9 8 . . 
-        . . . 9 8 9 8 8 1 9 9 8 8 9 . . 
-        . . . 1 8 1 9 8 9 9 8 9 8 . . . 
-        . . . 9 8 1 9 1 9 9 8 9 9 . . . 
-        . . . 9 8 1 1 1 9 1 8 8 9 . . . 
-        . . 9 9 9 8 9 9 9 9 8 9 8 . . . 
-        . 9 8 1 1 1 1 1 1 1 1 1 9 8 8 . 
-        . 9 1 1 1 1 1 1 1 1 1 1 1 1 9 . 
-        . 8 9 1 1 1 1 1 1 1 1 1 1 8 8 . 
-        . . 8 9 9 9 9 9 9 9 9 9 9 8 . . 
+        ..ddddddddddd...
+        dd11111111111dd.
+        81111111111111d8
+        8881111111111888
+        .898888888888898
+        .891191988889198
+        .891191911991198
+        .891191911991988
+        .89119191191198.
+        .89119991191198.
+        .89119991191198.
+        .88819991191198.
+        .88819991991198.
+        .8881999191119..
+        ..881999191119..
+        ..88199.991119..
+        8.181991191119..
+        ..919991991199..
+        ..919191891999..
+        ...19991899898..
+        ..919891899998..
+        ..199891899998..
+        ...98981899998..
+        ...98988199889..
+        ...1819899898...
+        ...9819199899...
+        ...9811191889...
+        ..99989999898...
+        .98111111111988.
+        .91111111111119.
+        .89111111111188.
+        ..899999999998..
         `, SpriteKind.zglTeleportBeam)
     tiles.placeOnTile(zglTeleportBeamSprite, tiles.getTileLocation(4, 2))
     zglTeleportBeamSprite.y += -8
